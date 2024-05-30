@@ -1,6 +1,16 @@
+import os #operation related to our filesystem
+import pathlib #it provide the generator or function for feching the data 
+
+#generator is a typr of function that are in lazy manner it never execute exactly after the running the function it create the dag of operation
+
+#IT IS A MODULE 
 NUM_INPUTS = 2
 NUM_LAYERS = 3
 P = [NUM_INPUTS,2,1] # NO OF PERCEPTRON
+
+PACKAGE_ROOT = pathlib.Path(src.__file__).resolve().parent # making src the root directory
+DATAPATH = os.path.join(PACKAGE_ROOT,"datasets") 
+#"/src/datasets"
 
 
 
