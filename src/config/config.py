@@ -16,7 +16,9 @@ DATAPATH = os.path.join(PACKAGE_ROOT,"datasets")
 SAVED_MODEL_PATH = os.path.join(PACKAGE_ROOT,"trained_model") 
 #"/src/trained_model"
 
-f = [None,"LINEAR","SIGMOID","RELU","LEAKY RELU"] # list of activation
+f = [None,"LINEAR","SIGMOID"] # list of activation
+
+TASK_TYPE = "classification"
 
 LOSS_FUNCTION = ["MEAN SQUARED ERROR"]
 MINI_BATCH_SIZE = 1
