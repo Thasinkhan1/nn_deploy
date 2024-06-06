@@ -20,14 +20,14 @@ def save_model(theta0,theta):# it save the parameters or which type of activatio
     
     
     with open(pkl_file_path,"wb") as file_handle:
-        file_handle.dump({"params":{"Biases:":theta0,"Weights:":theta},"activation":config.f})
+        pickle.dump({"params":{"Biases:":theta0,"Weights:":theta},"activation":config.f},file_handle)
     
     
 def load_model(file_name): #load the saved model
     pkl_file_path = os.path.join(config.SAVED_MODEL_PATH,file_name)
     
     with open(pkl_file_path,"rb") as file_handel:
-        trained_params = file_handel.load()
+        trained_params = pickle.load()
         
         
     return trained_params["Biases"],trained_params["Weights"]

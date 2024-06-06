@@ -7,6 +7,7 @@ class preprosses_data:
             
             self.num_rows = X.shape[0]
             
+            
             if len(X.shape)==1:
                 
                 self.num_input_features = 1 
@@ -18,6 +19,8 @@ class preprosses_data:
                 self.num_target_feauters_dim = 1
             else:
                 self.num_target_feauters_dim = y.shape[1]
+                
+            
             
         def transform(self,X=None,y=None):
             

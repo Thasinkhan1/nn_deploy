@@ -16,11 +16,10 @@ DATAPATH = os.path.join(PACKAGE_ROOT,"datasets")
 SAVED_MODEL_PATH = os.path.join(PACKAGE_ROOT,"trained_model") 
 #"/src/trained_model"
 
-f = [None,"LINEAR","SIGMOID"] # list of activation
+f = [None,"linear","sigmoid"] # list of activation
 
-TASK_TYPE = "classification"
 
-LOSS_FUNCTION = ["MEAN SQUARED ERROR"]
+LOSS_FUNCTION = ["mean squared error"]
 MINI_BATCH_SIZE = 1
 # theta0 = [None]
 # theta = [None]
