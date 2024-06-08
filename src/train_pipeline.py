@@ -139,7 +139,7 @@ def run_training(tol,epsilon):
       epoch_counter = epoch_counter + 1
       loss_per_epoch.append(mse)
       print("Epoch # {}, Loss = {} ".format(epoch_counter,mse))
-  
+      print(f"the loss is saved with the filename at {config.pathlib}")
         #Now, we will be running Gradient Descent Algorithm (Backpropagation Algorithm) by computing the overall derivative of the Loss Function wrt the biases and
         #weights of each layer (as shown in the second picture below) and updating these parameters.
         
