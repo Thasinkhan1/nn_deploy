@@ -11,8 +11,16 @@ RUN chmod -R 777 /app/src
 
 RUN pip install -r /app/src/requirements.txt
 
+RUN python -m src.train_pipeline
 
-ENV PYTHONPATH=${PYTHONPATH}:/app/src
+EXPOSE 5000
 
+CMD ["uvicorn", "src.predict:app", "--host", "0.0.0.0", "--port", "5000"]
 
-CMD python3 ./src/train_pipeline.py
+# ENV PYTHONPATH=${PYTHONPATH}:/app/src
+
+# RUN tail -f /var/log/error.log 
+
+# #ENTRYPOINT ["python3"]
+# #
+# #CMD ["./src/train_pipeline.py"]

@@ -86,63 +86,51 @@ def run_training(tol,epsilon):
     p.initialize_paramerters()
     
     while True:
+      
       mse = 0
-      for i in range(X_train.shape[0]):
- 
-          h[0] = X_train[i].reshape(1,X_train.shape[1]) # 0th index of h h[0] = (0,0)
+      batch_size = config.MINI_BATCH_SIZE
+      
+      for i in range(0,X_train.shape[0],batch_size):
+          batch_size_x = X_train[i:i + batch_size]
+          batch_size_y = Y_train[i:i + batch_size].reshape(-1,1)
+
+          h[0] = batch_size_x
     
-          for l in range(1,config.NUM_LAYERS): #loop is run 2 times
+          for l in range(1,config.NUM_LAYERS):
 
     
             z[l] = layer_neurons_weighted_sum(h[l-1], p.theta0[l], p.theta[l])
-            #print("z[{}].shape = {}".format(l,z[l].shape))
             h[l] = layer_neurons_output(z[l], config.f[l])
-            #print("h[{}].shape = {}".format(l,h[l].shape))
     
             del_fl_by_del_z[l] = del_layer_neurons_outputs_wrt_weighted_sums(config.f[l],z[l])
-            #print("del_fl_by_del_z[{}].shape = {}".format(l,del_fl_by_del_z[l].shape))
             del_hl_by_del_theta0[l] = del_layer_neurons_outputs_wrt_biases(del_fl_by_del_z[l])
-            #print("del_hl_by_del_theta0[{}].shape = {}".format(l,del_hl_by_del_theta0[l].shape))
             del_hl_by_del_theta[l] = del_layer_neurons_outputs_wrt_weights(h[l-1],del_fl_by_del_z[l])
-            #print("del_hl_by_del_theta[{}].shape = {}".format(l,del_hl_by_del_theta[l].shape))
-    
 
-      #print("\n")
-
-      Y_train[i] = Y_train[i].reshape(Y_train[i].shape[0],1)
-     #       print("y[{}].shape = {}".format(i,y[i].shape))
-      L = (1/2)*(Y_train[i][0] - h[config.NUM_LAYERS-1][0,0])**2
-            #The above expression is the expression of Loss Function in our case which is Squared Error.
+     
+      
+      L = (1/2)*np.mean((batch_size_y - h[config.NUM_LAYERS-1][0,0])**2)
       
       mse = mse + L
       
-      del_L_by_del_h[config.NUM_LAYERS-1] = (h[config.NUM_LAYERS-1] - Y_train[0])
-            #The above expression is the expression of derivative of the loss function with respect to the output of the Neural Network.
-             # print("del_L_by_del_h[{}].shape = {}".format(NUM_LAYERS-1,del_L_by_del_h[NUM_LAYERS-1].shape))
+      del_L_by_del_h[config.NUM_LAYERS-1] = (h[config.NUM_LAYERS-1] - batch_size_y)/batch_size
+      
       for l in range(config.NUM_LAYERS-2,0,-1):
-      
           del_L_by_del_h[l] = np.matmul(del_L_by_del_h[l+1], (del_fl_by_del_z[l+1] * p.theta[l+1]).T)
-              #print("del_L_by_del_h[{}].shape = {}".format(l,del_L_by_del_h[l].shape))
-              #The expression shown above is computing the derivative of the Loss Function wrt to the output of neurons in a layer. For more information, please see
-              #the first picture below.
-      
-      #print("\n\n\n")
+              
       for l in range(1,config.NUM_LAYERS):
-              del_L_by_del_theta0[l] = del_L_by_del_h[l] * del_hl_by_del_theta0[l]
-              del_L_by_del_theta[l] = del_L_by_del_h[l] * del_hl_by_del_theta[l]
+        
+        del_L_by_del_theta0[l] = np.sum(del_L_by_del_h[l] * del_hl_by_del_theta0[l], axis=0, keepdims=True)
+        del_L_by_del_theta[l] = np.matmul(h[l - 1].T, del_L_by_del_h[l] * del_hl_by_del_theta[l])
       
-              p.theta0[l] = p.theta0[l] - (epsilon * del_L_by_del_theta0[l])
-              p.theta[l] = p.theta[l] - (epsilon * del_L_by_del_theta[l])
+        p.theta0[l] = p.theta0[l] - (epsilon * del_L_by_del_theta0[l])
+        p.theta[l] = p.theta[l] - (epsilon * del_L_by_del_theta[l])
               
-              
-      mse = mse/X_train.shape[0]
+      mse = mse/(X_train.shape[0]//batch_size)
       epoch_counter = epoch_counter + 1
       loss_per_epoch.append(mse)
       print("Epoch # {}, Loss = {} ".format(epoch_counter,mse))
       print(f"the loss is saved with the filename at {config.pathlib}")
-        #Now, we will be running Gradient Descent Algorithm (Backpropagation Algorithm) by computing the overall derivative of the Loss Function wrt the biases and
-        #weights of each layer (as shown in the second picture below) and updating these parameters.
-        
+            
       if abs(loss_per_epoch[epoch_counter]-loss_per_epoch[epoch_counter-1]) < tol:
          break
 
