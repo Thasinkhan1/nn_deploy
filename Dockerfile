@@ -1,26 +1,31 @@
-FROM python:3.10.14-bookworm
+FROM python:3.8.19-bookworm
 
+# Upgrade pip
 RUN pip install --upgrade pip
 
-COPY  src /app/src
-
+# Set the working directory
 WORKDIR /app
 
+# Copy the project files
+COPY . /app
 
+# Ensure permissions
 RUN chmod -R 777 /app/src
 
+# Install required Python packages
 RUN pip install -r /app/src/requirements.txt
 
+# Run the training script
 RUN python -m src.train_pipeline
 
+# Expose port 5000 for the application
 EXPOSE 5000
 
-CMD ["uvicorn", "src.predict:app", "--host", "0.0.0.0", "--port", "5000"]
+# Set environment variables for Flask
+ENV PYTHONPATH=${PYTHONPATH}:/app/src
+ENV FLASK_APP=src.predict
+ENV FLASK_RUN_HOST=0.0.0.0
+ENV FLASK_RUN_PORT=5000
 
-# ENV PYTHONPATH=${PYTHONPATH}:/app/src
-
-# RUN tail -f /var/log/error.log 
-
-# #ENTRYPOINT ["python3"]
-# #
-# #CMD ["./src/train_pipeline.py"]
+# Command to run the Flask application
+CMD ["flask", "run"]

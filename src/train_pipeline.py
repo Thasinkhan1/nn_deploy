@@ -5,7 +5,7 @@ import src.preprocessing.preprocessor as pp
 from src.preprocessing.preprocessor import preprosses_data #importing the class from preprocessor.py
 
 from src.preprocessing.data_management import load_dataset,save_model,load_model
-import pipeline as p
+import src.pipeline as p
 
 
 

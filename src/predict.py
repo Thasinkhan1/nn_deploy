@@ -13,7 +13,7 @@ app = Flask(__name__)
 def predict(X):
     loaded_model = load_model("two_input_XOR_nn.pkl") # loading the trained data from pickling file
     
-    preprocessor = pp.PreprocessData()
+    preprocessor = pp.preprosses_data()
     preprocessor.fit(X)
     X_processed, _ = preprocessor.transform(X)
 
@@ -25,7 +25,7 @@ def predict(X):
         X_batch = X_processed[i:i + config.MINI_BATCH_SIZE]
 
         
-        Z = np.dot(X_batch, loaded_model["params"]["weights"][1]) + loaded_model["params"]["biases"][1]
+        Z = np.dot(X_batch, loaded_model["params"]["Weights"][1]) + loaded_model["params"]["Biases"][1]
         A = 1 / (1 + np.exp(-Z)) # Example activation function (sigmoid)
         predictions.extend(A)
 

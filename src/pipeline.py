@@ -31,3 +31,17 @@ def initialize_paramerters():
    
    
    
+
+def mini_batch_training(X, Y, mini_batch_size=2):
+    initialize_parameters()
+    
+    num_batches = math.ceil(len(X) / mini_batch_size)
+    
+    for epoch in range(config.NUM_INPUTS):
+        for batch_idx in range(num_batches):
+            start_idx = batch_idx * mini_batch_size
+            end_idx = min((batch_idx + 1) * mini_batch_size, len(X))
+            
+            X_batch = X[start_idx:end_idx]
+            Y_batch = Y[start_idx:end_idx]
+   
