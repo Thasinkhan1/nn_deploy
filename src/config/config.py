@@ -18,5 +18,5 @@ SAVED_MODEL_PATH = os.path.join(PACKAGE_ROOT,"trained_model")
 f = [None,"linear","sigmoid"] # list of activation function
 
 
-LOSS_FUNCTION = ["mean squared error"]
+LOSS_FUNCTION = "mean squared error"
 MINI_BATCH_SIZE = 2

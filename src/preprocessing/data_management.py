@@ -14,23 +14,27 @@ def load_dataset(file_name):
     data = pd.read_csv(file_path)
     return data
 
+
 def save_model(theta0,theta):# it save the parameters or which type of activation function you used
-    
     pkl_file_path = os.path.join(config.SAVED_MODEL_PATH,"two_input_XOR_nn.pkl")
     
     
-    with open(pkl_file_path,"wb") as file_handle:
-        pickle.dump({"params":{"Biases:":theta0,"Weights:":theta},"activation":config.f},file_handle)
+    with open(pkl_file_path,"wb") as file_handel:
+        
+        pickle.dump({"params":{"Biases:":theta0,"Weights:":theta},"activation":config.f},file_handel)
     
     print("Saved Model with file name {} at {}".format("two_input_XOR_nn.pkl",config.SAVED_MODEL_PATH))
     
-def load_model(file_name): #load the saved model
-    pkl_file_path = os.path.join(config.SAVED_MODEL_PATH,file_name)
     
+    
+def load_model(file_name): #load the saved model
+    
+    pkl_file_path = os.path.join(config.SAVED_MODEL_PATH,file_name)
     with open(pkl_file_path,"rb") as file_handel:
-        trained_params = pickle.load(file_handel)
+         loaded_model = pickle.load(file_handel)
+    
+    print(f"Loaded Model structure: {loaded_model}")
         
-        
-    return load_model
+    return loaded_model
 
 

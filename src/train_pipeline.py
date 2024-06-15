@@ -1,11 +1,11 @@
 import pandas as pd
 import numpy as np
-from src.config import config
-import src.preprocessing.preprocessor as pp
-from src.preprocessing.preprocessor import preprosses_data #importing the class from preprocessor.py
-
-from src.preprocessing.data_management import load_dataset,save_model,load_model
 import src.pipeline as p
+import src.preprocessing.preprocessor as pp
+
+from src.config import config
+from src.preprocessing.preprocessor import preprosses_data 
+from src.preprocessing.data_management import load_dataset,save_model,load_model
 
 
 
@@ -97,39 +97,37 @@ def run_training(tol,epsilon):
           h[0] = batch_size_x
     
           for l in range(1,config.NUM_LAYERS):
-
-    
-            z[l] = layer_neurons_weighted_sum(h[l-1], p.theta0[l], p.theta[l])
-            h[l] = layer_neurons_output(z[l], config.f[l])
-    
-            del_fl_by_del_z[l] = del_layer_neurons_outputs_wrt_weighted_sums(config.f[l],z[l])
-            del_hl_by_del_theta0[l] = del_layer_neurons_outputs_wrt_biases(del_fl_by_del_z[l])
-            del_hl_by_del_theta[l] = del_layer_neurons_outputs_wrt_weights(h[l-1],del_fl_by_del_z[l])
-
+            
+               z[l] = layer_neurons_weighted_sum(h[l-1], p.theta0[l], p.theta[l])
+               h[l] = layer_neurons_output(z[l], config.f[l])
+       
+               del_fl_by_del_z[l] = del_layer_neurons_outputs_wrt_weighted_sums(config.f[l],z[l])
+               del_hl_by_del_theta0[l] = del_layer_neurons_outputs_wrt_biases(del_fl_by_del_z[l])
+               del_hl_by_del_theta[l] = del_layer_neurons_outputs_wrt_weights(h[l-1],del_fl_by_del_z[l])
+   
      
-      
-      L = (1/2)*np.mean((batch_size_y - h[config.NUM_LAYERS-1][0,0])**2)
-      
-      mse = mse + L
-      
-      del_L_by_del_h[config.NUM_LAYERS-1] = (h[config.NUM_LAYERS-1] - batch_size_y)/batch_size
-      
-      for l in range(config.NUM_LAYERS-2,0,-1):
-          del_L_by_del_h[l] = np.matmul(del_L_by_del_h[l+1], (del_fl_by_del_z[l+1] * p.theta[l+1]).T)
-              
-      for l in range(1,config.NUM_LAYERS):
-        
-        del_L_by_del_theta0[l] = np.sum(del_L_by_del_h[l] * del_hl_by_del_theta0[l], axis=0, keepdims=True)
-        del_L_by_del_theta[l] = np.matmul(h[l - 1].T, del_L_by_del_h[l] * del_hl_by_del_theta[l])
-      
-        p.theta0[l] = p.theta0[l] - (epsilon * del_L_by_del_theta0[l])
-        p.theta[l] = p.theta[l] - (epsilon * del_L_by_del_theta[l])
-              
+          
+          L = (1/2)*np.mean((batch_size_y - h[config.NUM_LAYERS-1][0,0])**2)
+          
+          mse = mse + L
+          
+          del_L_by_del_h[config.NUM_LAYERS-1] = (h[config.NUM_LAYERS-1] - batch_size_y)/batch_size
+          
+          for l in range(config.NUM_LAYERS-2,0,-1):
+              del_L_by_del_h[l] = np.matmul(del_L_by_del_h[l+1], (del_fl_by_del_z[l+1] * p.theta[l+1]).T)
+                  
+          for l in range(1,config.NUM_LAYERS):
+            
+              del_L_by_del_theta0[l] = np.sum(del_L_by_del_h[l] * del_hl_by_del_theta0[l], axis=0, keepdims=True)
+              del_L_by_del_theta[l] = np.matmul(h[l - 1].T, del_L_by_del_h[l] * del_hl_by_del_theta[l])
+            
+              p.theta0[l] = p.theta0[l] - (epsilon * del_L_by_del_theta0[l])
+              p.theta[l] = p.theta[l] - (epsilon * del_L_by_del_theta[l])
+                  
       mse = mse/(X_train.shape[0]//batch_size)
       epoch_counter = epoch_counter + 1
       loss_per_epoch.append(mse)
       print("Epoch # {}, Loss = {} ".format(epoch_counter,mse))
-      print(f"the loss is saved with the filename at {config.pathlib}")
             
       if abs(loss_per_epoch[epoch_counter]-loss_per_epoch[epoch_counter-1]) < tol:
          break

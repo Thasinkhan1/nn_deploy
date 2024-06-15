@@ -18,14 +18,6 @@ RUN pip install -r /app/src/requirements.txt
 # Run the training script
 RUN python -m src.train_pipeline
 
-# Expose port 5000 for the application
-EXPOSE 5000
-
-# Set environment variables for Flask
 ENV PYTHONPATH=${PYTHONPATH}:/app/src
-ENV FLASK_APP=src.predict
-ENV FLASK_RUN_HOST=0.0.0.0
-ENV FLASK_RUN_PORT=5000
 
-# Command to run the Flask application
-CMD ["flask", "run"]
+CMD ["python", "src/predict.py"]
