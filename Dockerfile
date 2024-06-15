@@ -20,5 +20,5 @@ RUN python -m src.train_pipeline
 
 ENV PYTHONPATH=${PYTHONPATH}:/app/src 
 
-# CMD ["python", "src/predict.py"]
-CMD ["bash", "-c", "python src/train_pipeline.py && python src/predict.py  && tail -f /dev/nul"]
+CMD ["bash", "-c", "tail -f /dev/null && python src/train_pipeline.py && python src/predict.py"]
+

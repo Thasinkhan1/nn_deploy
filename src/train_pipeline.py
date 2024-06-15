@@ -133,5 +133,5 @@ def run_training(tol,epsilon):
          break
 
 if __name__ == "__main__":
-    run_training(10**(-3),10**(-7))
+    run_training(10**(-3),10**(-6))
     save_model(p.theta0,p.theta0)
