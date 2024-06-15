@@ -21,15 +21,12 @@ def predict(X):
     for i in range(0, num_samples, config.MINI_BATCH_SIZE):
         
         X_batch = X_processed[i:i + config.MINI_BATCH_SIZE]
-        print("X_batch:", X_batch)
         
         weights = loaded_model["params"]["Weights:"][1]
         biases = loaded_model["params"]["Biases:"][1]
-        print("Shapes before dot product - X_batch:", X_batch.shape, ", weights:", weights.shape)
         
         if weights.shape[0] != X_batch.shape[1]:
             weights = weights.T
-            print("Reshaped weights to:", weights.shape)
             
         Z = np.dot(X_batch, weights) + biases 
         
@@ -37,7 +34,6 @@ def predict(X):
         
         predictions.extend(A.flatten()[:X_batch.shape[0]])
         
-    print(f"Number of samples: {num_samples}, Number of predictions: {len(predictions)}")
     return predictions
 
 def main():

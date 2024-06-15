@@ -18,6 +18,7 @@ RUN pip install -r /app/src/requirements.txt
 # Run the training script
 RUN python -m src.train_pipeline
 
-ENV PYTHONPATH=${PYTHONPATH}:/app/src
+ENV PYTHONPATH=${PYTHONPATH}:/app/src 
 
-CMD ["python", "src/predict.py"]
+# CMD ["python", "src/predict.py"]
+CMD ["bash", "-c", "python src/train_pipeline.py && python src/predict.py"]

@@ -32,8 +32,6 @@ def load_model(file_name): #load the saved model
     pkl_file_path = os.path.join(config.SAVED_MODEL_PATH,file_name)
     with open(pkl_file_path,"rb") as file_handel:
          loaded_model = pickle.load(file_handel)
-    
-    print(f"Loaded Model structure: {loaded_model}")
         
     return loaded_model
 
